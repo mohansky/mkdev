@@ -1,0 +1,286 @@
+---
+import Title from "@components/global/Title.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+<section class="isolate px-6 py-24 sm:py-32 lg:px-8">
+    <div class="absolute inset-x-0 top-[-10rem] transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+        <div class="gradient-element"></div>
+    </div>
+    <div class="mx-auto">
+        <Title class="pb-10 pt-20 uppercase" title={t("contact.title")} subtitle={t("contact.subtitle")} />
+        
+        <!-- Success/Error Messages -->
+        <div id="form-messages" class="mx-auto max-w-2xl mb-4" style="display: none;">
+            <div id="success-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" style="display: none;">
+                <strong>Success!</strong> Your message has been sent successfully.
+            </div>
+            <div id="error-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" style="display: none;">
+                <strong>Error!</strong> <span id="error-text"></span>
+            </div>
+        </div>
+
+        <form id="contact-form" class="mx-auto max-w-2xl pt-12 lg:pt-20">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                <div class="form-field sm:col-span-2">
+                    <label for="name" class="form-label">{t("contact.name")}*</label>
+                    <input type="text" name="name" id="name" autocomplete="given-name" required />
+                </div>
+                <div class="form-field sm:col-span-2">
+                    <label for="email" class="form-label">{t("contact.email")}*</label>
+                    <input type="email" name="email" id="email" autocomplete="email" required />
+                </div>
+                <div class="form-field sm:col-span-2">
+                    <label for="company" class="form-label">{t("contact.company")}</label>
+                    <input type="text" name="company" id="company" autocomplete="organization" />
+                </div>
+                <div class="form-field sm:col-span-2">
+                    <label for="message" class="form-label">{t("contact.message")}*</label>
+                    <textarea name="message" id="message" rows="4" required></textarea>
+                </div>
+                <div class="flex gap-x-4 sm:col-span-2">
+                    <label class="text-sm leading-6 text-gray-600" id="switch-1-label">
+                        {t("contact.agree")}
+                        <a href="/privacy" class="font-semibold text-slate-800">privacy policy</a>.
+                    </label>
+                </div>
+            </div>
+            <div class="flex pt-10">
+                <div class="squircle-bg rounded-lg bg-zinc-900">
+                    <button
+                        type="submit"
+                        id="submit-button"
+                        class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-slate-200 transition-all hover:text-white sm:w-auto md:font-bold lg:h-10">
+                        <span id="button-text">{t("contact.send")}</span>
+                        <span id="loading-spinner" class="hidden ml-2">
+                            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+interface ApiResponse {
+  success?: boolean;
+  message?: string;
+  id?: string;
+  error?: string;
+}
+
+document.addEventListener('DOMContentLoaded', function(): void {
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+    const buttonText = document.getElementById('button-text') as HTMLElement;
+    const loadingSpinner = document.getElementById('loading-spinner') as HTMLElement;
+    const formMessages = document.getElementById('form-messages') as HTMLElement;
+    const successMessage = document.getElementById('success-message') as HTMLElement;
+    const errorMessage = document.getElementById('error-message') as HTMLElement;
+    const errorText = document.getElementById('error-text') as HTMLElement;
+
+    if (!form || !submitButton || !buttonText || !loadingSpinner || 
+        !formMessages || !successMessage || !errorMessage || !errorText) {
+        console.error('Required form elements not found');
+        return;
+    }
+
+    form.addEventListener('submit', async function(e: Event): Promise<void> {
+        e.preventDefault();
+        
+        // Show loading state
+        submitButton.disabled = true;
+        buttonText.style.display = 'none';
+        loadingSpinner.classList.remove('hidden');
+        
+        // Hide previous messages
+        formMessages.style.display = 'none';
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+
+        try {
+            const formData = new FormData(form);
+            
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result: ApiResponse = await response.json();
+
+            if (response.ok && result.success) {
+                // Show success message
+                successMessage.style.display = 'block';
+                formMessages.style.display = 'block';
+                
+                // Reset form
+                form.reset();
+                
+                // Scroll to success message
+                formMessages.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // Show error message
+                errorText.textContent = result.error || 'Something went wrong. Please try again.';
+                errorMessage.style.display = 'block';
+                formMessages.style.display = 'block';
+                
+                // Scroll to error message
+                formMessages.scrollIntoView({ behavior: 'smooth' });
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            errorText.textContent = 'Network error. Please check your connection and try again.';
+            errorMessage.style.display = 'block';
+            formMessages.style.display = 'block';
+            
+            // Scroll to error message
+            formMessages.scrollIntoView({ behavior: 'smooth' });
+        } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            buttonText.style.display = 'inline';
+            loadingSpinner.classList.add('hidden');
+        }
+    });
+});
+</script>
+
+<style>
+    .gradient-element {
+        @apply relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem];
+        clip-path: polygon(
+            74.1% 44.1%,
+            100% 61.6%,
+            97.5% 26.9%,
+            85.5% 0.1%,
+            80.7% 2%,
+            72.5% 32.5%,
+            60.2% 62.4%,
+            52.4% 68.1%,
+            47.5% 58.3%,
+            45.2% 34.5%,
+            27.5% 76.7%,
+            0.1% 64.9%,
+            17.9% 100%,
+            27.6% 76.8%,
+            76.1% 97.7%,
+            74.1% 44.1%
+        );
+    }
+    .form-field {
+        @apply block;
+    }
+    .form-label {
+        @apply flex pl-1 text-sm font-semibold leading-6 text-gray-900;
+    }
+    input,
+    textarea {
+        @apply pointer-events-auto relative m-0 w-full cursor-text rounded-lg border-0 bg-slate-200 px-5 py-2 text-xl font-normal not-italic outline-none placeholder:text-gray-400 focus:ring-slate-500;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+<!-- ---
+import Title from "@components/global/Title.astro";
+
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<section class="isolate px-6 py-24 sm:py-32 lg:px-8">
+	<div class="absolute inset-x-0 top-[-10rem] transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]" aria-hidden="true">
+		<div class="gradient-element"></div>
+	</div>
+	<div class="mx-auto">
+		<Title class="pb-10 pt-20 uppercase" title={t("contact.title")} subtitle={t("contact.subtitle")} />
+		<form data-static-form-name="contact" class="mx-auto max-w-2xl pt-12 lg:pt-20">
+			<div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+				<div class="form-field sm:col-span-2">
+					<label for="name" class="form-label">{t("contact.name")}*</label>
+					<input type="text" name="name" id="name" autocomplete="given-name" required />
+				</div>
+				<div class="form-field sm:col-span-2">
+					<label for="email" class="form-label">{t("contact.email")}*</label>
+					<input type="email" name="email" id="email" autocomplete="email" required />
+				</div>
+				<div class="form-field sm:col-span-2">
+					<label for="company" class="form-label">{t("contact.company")}</label>
+					<input type="text" name="company" id="company" autocomplete="organization" />
+				</div>
+				<div class="form-field sm:col-span-2">
+					<label for="message" class="form-label">{t("contact.message")}*</label>
+					<textarea name="message" id="message" rows="4" required></textarea>
+				</div>
+				<div class="flex gap-x-4 sm:col-span-2">
+					<label class="text-sm leading-6 text-gray-600" id="switch-1-label">
+						{t("contact.agree")}
+						<a href="/privacy" class="font-semibold text-slate-800">privacy policy</a>.
+					</label>
+				</div>
+			</div>
+			<div class="flex pt-10">
+				<div class="squircle-bg rounded-lg bg-zinc-900">
+					<button
+						type="submit"
+						class="flex h-10 w-full max-w-52 flex-1 items-center justify-center px-4 py-2 text-xl text-slate-200 transition-all hover:text-white sm:w-auto md:font-bold lg:h-10">
+						{t("contact.send")}
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+
+<style>
+	.gradient-element {
+		@apply relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem];
+		clip-path: polygon(
+			74.1% 44.1%,
+			100% 61.6%,
+			97.5% 26.9%,
+			85.5% 0.1%,
+			80.7% 2%,
+			72.5% 32.5%,
+			60.2% 62.4%,
+			52.4% 68.1%,
+			47.5% 58.3%,
+			45.2% 34.5%,
+			27.5% 76.7%,
+			0.1% 64.9%,
+			17.9% 100%,
+			27.6% 76.8%,
+			76.1% 97.7%,
+			74.1% 44.1%
+		);
+	}
+
+	.form-field {
+		@apply block;
+	}
+
+	.form-label {
+		@apply flex pl-1 text-sm font-semibold leading-6 text-gray-900;
+	}
+
+	input,
+	textarea {
+		@apply pointer-events-auto relative m-0 w-full cursor-text rounded-lg border-0 bg-slate-200 px-5 py-2 text-xl font-normal not-italic outline-none placeholder:text-gray-400 focus:ring-slate-500;
+	}
+</style> -->
