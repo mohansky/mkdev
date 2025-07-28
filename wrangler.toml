@@ -9,3 +9,7 @@ directory = "./dist"
 
 [observability]
 enabled = true
+
+routes = [
+  { pattern = "mohankumar.dev", custom_domain = true }
+]
