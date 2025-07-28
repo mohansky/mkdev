@@ -5,12 +5,12 @@ import icon from "astro-icon";
 import node from "@astrojs/node";
 import { defineConfig } from "astro/config";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
     // output: 'hybrid', // This should work with Astro 5.3.0
-    adapter: node({
-        mode: 'standalone'
-    }),
+    adapter: cloudflare(),
     vite: {
         server: {
             watch: {
