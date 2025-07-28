@@ -87,6 +87,9 @@ importers:
       unlighthouse:
         specifier: 0.15.0
         version: 0.15.0(puppeteer@24.15.0(typescript@5.8.3))(rollup@4.45.1)(typescript@5.8.3)(vue@3.5.18(typescript@5.8.3))
+      wrangler:
+        specifier: ^4.26.0
+        version: 4.26.0(@cloudflare/workers-types@4.20250214.0)
 
 packages:
 
@@ -10093,6 +10096,23 @@ snapshots:
       '@cloudflare/workerd-linux-64': 1.20250712.0
       '@cloudflare/workerd-linux-arm64': 1.20250712.0
       '@cloudflare/workerd-windows-64': 1.20250712.0
+
+  wrangler@4.26.0(@cloudflare/workers-types@4.20250214.0):
+    dependencies:
+      '@cloudflare/kv-asset-handler': 0.4.0
+      '@cloudflare/unenv-preset': 2.4.1(unenv@2.0.0-rc.17)(workerd@1.20250712.0)
+      blake3-wasm: 2.1.5
+      esbuild: 0.25.4
+      miniflare: 4.20250712.2
+      path-to-regexp: 6.3.0
+      unenv: 2.0.0-rc.17
+      workerd: 1.20250712.0
+    optionalDependencies:
+      '@cloudflare/workers-types': 4.20250214.0
+      fsevents: 2.3.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   wrangler@4.26.0(@cloudflare/workers-types@4.20250726.0):
     dependencies:

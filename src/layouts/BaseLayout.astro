@@ -20,15 +20,15 @@ const lang = getLangFromUrl(Astro.url);
 const shareImage = new URL("/images/meta/mintaka_share.gif", Astro.site).toString();
 
 const defaultSeo: AstroSeoProps = {
-	title: "Web Agency Leading in Performant Web Design Solutions - Mintaka Studio",
+	title: "MK Dev | Performant Web Design Solutions",
 	description:
-		"Mintaka Studio excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
+		"Excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
 	canonical: "https://mintaka.co",
 	openGraph: {
 		url: "https://mintaka.co",
-		title: "Web Agency Leading in Performant Web Design Solutions - Mintaka Studio",
+		title: "MK Dev | Performant Web Design Solutions",
 		description:
-			"Mintaka Studio excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
+			"Eexcels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
 		images: [
 			{
 				url: shareImage,
@@ -45,17 +45,17 @@ const defaultSeo: AstroSeoProps = {
 				type: "image/gif",
 			},
 		],
-		site_name: "Mintaka",
+		site_name: "MKDev",
 	},
 	twitter: {
-		handle: "@mintakastudio",
-		site: "@mintakastudio",
+		handle: "@mkdev",
+		site: "@mkdev",
 		cardType: "summary_large_image",
 	},
 	additionalMetaTags: [
 		{
 			name: "publisher",
-			content: "Mintaka Studio",
+			content: "MK",
 		},
 	],
 };
@@ -66,7 +66,7 @@ const seo = {
 };
 
 function cursorFollowerActive() {
-	const paths = ["", "/", "/it/", "/it"];
+	const paths = ["", "/", "/de/", "/de"];
 	return paths.includes(pathname);
 }
 ---
