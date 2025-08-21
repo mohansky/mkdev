@@ -19,11 +19,11 @@ const translatePath = useTranslatedPath(lang);
 			<div class="col-span-3 row-start-1 lg:col-span-2 lg:col-start-4 lg:row-start-auto">
 				<div class="flex flex-col gap-2">
 					<a href={translatePath("/")}>Home</a>
+					<a href={translatePath("/contact/")}>{t("contacts")}</a>
 					<!-- <a href={translatePath("/blog/")}>Blog</a> -->
 					<!-- <a href={translatePath("/tags/")}>Tags</a> -->
-					<a href={translatePath("/contact/")}>{t("contacts")}</a>
-					<a href={translatePath("/terms/")}>Terms</a>
-					<a href={translatePath("/privacy/")}>Privacy Policy</a>
+					<!-- <a href={translatePath("/terms/")}>Terms</a>
+					<a href={translatePath("/privacy/")}>Privacy Policy</a> -->
 					<!-- <a href={translatePath("/rss.xml")}>RSS</a> -->
 				</div>
 			</div>
