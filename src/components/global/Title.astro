@@ -1,0 +1,13 @@
+---
+const { title, subtitle, class: className } = Astro.props;
+---
+
+<div class:list={["flex md:justify-center", className]}>
+	<div class="inline-flex flex-col gap-4">
+		<div class="inline-flex items-center gap-4">
+			 <!-- <div class="hidden h-1 w-10 bg-black md:block"></div> -->
+			 <span class="font-mono text-xs font-semibold uppercase tracking-wide" set:html={subtitle} />  
+		</div>
+		<!-- <h1 class="font-display text-5xl font-extrabold sm:text-3xl md:text-4xl lg:text-6xl">{title}</h1> -->
+	</div>
+</div>

@@ -1,0 +1,38 @@
+---
+import Title from "@components/global/Title.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<section>
+	<div class="mx-auto max-w-7xl px-8 py-12 md:px-12 lg:px-32 lg:py-32">
+		<div>
+			<Title title="About" subtitle="Last updated 01. Jan 2024" class="pb-10 pt-20 uppercase" />
+		</div>
+		<div class="prose-styles mt-12 lg:mt-24">
+			<h2 id="shine-the-light-disclosure">Meet the Team</h2>
+
+			<h2 id="shine-the-light-disclosure">Mohan, Founder & Web Developer</h2>
+			<p>
+				A self-taught developer, Mohan began his journey by building a website for his own business. What started as one project grew into a
+				passion for creating websites that are clean, functional, and creative. Over the years, he has built websites for friends, small
+				businesses, and community projects, sharpening his skills with every challenge. Today, he focuses on web development and design while
+				expanding into app development.
+			</p>
+
+			<h2 id="shine-the-light-disclosure">Sindhu, Creative Lead & Brand Partner</h2>
+			<p>
+				With a diverse background spanning education, community engagement, and the arts, Sindhu brings a unique perspective to the team. She
+				has worked extensively with children and women in creative and learning environments, which has given her a strong ability to connect,
+				organize, and design meaningful experiences. Her keen eye for detail and storytelling strengthens the brand’s vision, ensuring that
+				every project reflects both clarity and creativity. Sindhu thrives in collaborative settings where thoughtful, high-quality work takes
+				center stage, and she leads the team’s creative direction, content, and brand identity
+			</p>
+			<!-- <h2 id="shine-the-light-disclosure">{t("privacy.wip")}</h2>
+			<p>{t("privacy.wip.content")}</p> -->
+		</div>
+	</div>
+</section>

@@ -1,0 +1,16 @@
+name = "mkdev"
+main = "./dist/_worker.js/index.js"
+compatibility_date = "2025-03-25"
+compatibility_flags = [ "nodejs_compat" ]
+workers_dev = false
+
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+
+[observability]
+enabled = true
+
+[[routes]]
+pattern = "mohankumar.dev"
+custom_domain = true

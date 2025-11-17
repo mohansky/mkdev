@@ -1,0 +1,24 @@
+---
+import Title from "@components/global/Title.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<section>
+	<div class="mx-auto max-w-7xl px-8 py-12 md:px-12 lg:px-32 lg:py-32">
+		<!-- <div>
+			<Title title="About Us" subtitle="Last updated 01. Jan 2024" class="pb-10 pt-20 uppercase" />
+		</div> -->
+		<div class="prose-styles mt-12 lg:mt-24">
+			<h2 id="shine-the-light-disclosure">{t("team1.title")}</h2>
+			<h4 class="font-mono text-xs font-semibold uppercase tracking-wide">{t("team1.subtitle")}</h4>
+			<p> {t("team1.content")} </p>
+			<h2 id="shine-the-light-disclosure">{t("team2.title")}</h2>
+			<h4 class="font-mono text-xs font-semibold uppercase tracking-wide">{t("team2.subtitle")}</h4>
+			<p> {t("team2.content")} </p>
+		</div>
+	</div>
+</section>
