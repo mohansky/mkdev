@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import yourProjectImage from "@assets/images/projects/yourProject.png";
 import WokCard from "@components/work/WokCard.astro";
 import { getLangFromUrl, useTranslatedPath, useTranslations } from "@i18n/utils";
 
@@ -13,11 +12,11 @@ const { class: className } = Astro.props;
 
 const allProjects = (await getCollection("projects"))
 	.filter((prj) => {
-		const [postLang, ...slug] = prj.slug.split("/");
+		const [postLang, ...slug] = prj.id.split("/");
 		return postLang === lang;
 	})
 	.map((prj) => {
-		const [postLang, slug] = prj.slug.split("/");
+		const [postLang, slug] = prj.id.split("/");
 
 		return {
 			...prj,

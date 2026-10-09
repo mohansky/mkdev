@@ -10,11 +10,11 @@ const translatePath = useTranslatedPath(lang);
 
 const allAuthors = (await getCollection("authors"))
 	.filter((author) => {
-		const [authorLang, ...slug] = author.slug.split("/");
+		const [authorLang, ...slug] = author.id.split("/");
 		return authorLang === lang;
 	})
 	.map((author) => {
-		const [authorLang, slug] = author.slug.split("/");
+		const [authorLang, slug] = author.id.split("/");
 
 		return {
 			...author,

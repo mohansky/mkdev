@@ -4,7 +4,7 @@ import rss from "@astrojs/rss";
 export async function GET(context: any) {
 	const blog = await getCollection("posts");
 	return rss({
-		title: "Mintaka's Blog",
+		title: "MK Dev's Blog",
 		description: "A humble Astronaut's guide to the stars",
 		site: context.site,
 		items: blog.map((post) => ({
@@ -12,7 +12,7 @@ export async function GET(context: any) {
 			pubDate: post.data.pubDate,
 			description: post.data.description,
 			// Compute RSS link from post `slug`
-			link: `/blog/${post.slug}/`,
+			link: `/blog/${post.id}/`,
 		})),
 	});
 }

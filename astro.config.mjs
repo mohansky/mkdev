@@ -1,22 +1,19 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
-import node from "@astrojs/node";
 import { defineConfig } from "astro/config";
 import { fileURLToPath } from 'url';
 
 import cloudflare from "@astrojs/cloudflare";
 
+// Placeholder blog pages: kept for a future blog, but not listed in the sitemap yet
+const sitemapExcluded = /^\/(de\/)?(blog|tags|author)(\/|$)/;
+
 // https://astro.build/config
 export default defineConfig({
-    // output: 'hybrid', // This should work with Astro 5.3.0
-    adapter: cloudflare(),
-    image: {
-        service: {
-            entrypoint: "astro/assets/services/compile"
-        }
-    },
+    adapter: cloudflare({
+        imageService: "compile",
+    }),
     vite: {
         resolve: {
             alias: {
@@ -35,21 +32,15 @@ export default defineConfig({
         locales: ["en", "de"],
     },
     markdown: {
-        drafts: true,
         shikiConfig: {
             theme: "css-variables",
+            wrap: true,
         },
     },
-    shikiConfig: {
-        wrap: true,
-        skipInline: false,
-        drafts: true,
-    },
     integrations: [
-        tailwind({
-            applyBaseStyles: false,
+        sitemap({
+            filter: (page) => !sitemapExcluded.test(new URL(page).pathname),
         }),
-        sitemap(),
         mdx(),
         icon(),
     ],

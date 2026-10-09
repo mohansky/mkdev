@@ -42,6 +42,9 @@ let pages = [
 // }
 
 const { pathname } = Astro.url;
+
+// compare paths without the language prefix or a trailing slash
+const normalizePath = (p: string) => p.replace(/^\/de(?=\/|$)/, "").replace(/\/$/, "");
 ---
 
 <header>
@@ -91,9 +94,8 @@ const { pathname } = Astro.url;
 										<a
 											href={translatePath(page.url)}
 											class={`inline-block cursor-pointer px-1 py-[0.33rem] ${
-												page.url === pathname ||
-												page.url === pathname.replace(/^\/it|\/$/, "") ||
-												(page.url === "/blog" && (pathname.startsWith("/blog") || pathname.startsWith("/it/blog")))
+												normalizePath(page.url) === normalizePath(pathname) ||
+												(page.url === "/blog" && normalizePath(pathname).startsWith("/blog"))
 													? "active"
 													: ""
 											}`}>
@@ -224,9 +226,9 @@ const { pathname } = Astro.url;
 					x: () => {
 						const pathName = window.location.pathname;
 
-						if (pathName === "/" || pathName === "/it/") {
+						if (pathName === "/" || pathName === "/de/") {
 							return "9.5rem";
-						} else if (pathName.startsWith("/blog") || pathName.startsWith("/it/blog")) {
+						} else if (pathName.startsWith("/blog") || pathName.startsWith("/de/blog")) {
 							return "3.5rem";
 						}
 

@@ -10,11 +10,11 @@ const translatePath = useTranslatedPath(lang);
 
 const allPosts = (await getCollection("posts"))
 	.filter((post) => {
-		const [postLang, ...slug] = post.slug.split("/");
+		const [postLang, ...slug] = post.id.split("/");
 		return postLang === lang;
 	})
 	.map((post) => {
-		const [postLang, slug] = post.slug.split("/");
+		const [postLang, slug] = post.id.split("/");
 
 		return {
 			...post,

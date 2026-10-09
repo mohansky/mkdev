@@ -15,14 +15,18 @@ const translatePath = useTranslatedPath(lang);
         <!-- Success/Error Messages -->
         <div id="form-messages" class="mx-auto max-w-2xl mb-4" style="display: none;">
             <div id="success-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" style="display: none;">
-                <strong>Success!</strong> Your message has been sent successfully.
+                {t("contact.success")}
             </div>
             <div id="error-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" style="display: none;">
-                <strong>Error!</strong> <span id="error-text"></span>
+                <span id="error-text"></span>
             </div>
         </div>
 
-        <form id="contact-form" class="mx-auto max-w-2xl pt-12 lg:pt-20">
+        <form
+            id="contact-form"
+            class="mx-auto max-w-2xl pt-12 lg:pt-20"
+            data-error-generic={t("contact.error")}
+            data-error-network={t("contact.error.network")}>
             <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 <div class="form-field sm:col-span-2">
                     <label for="name" class="form-label">{t("contact.name")}*</label>
@@ -133,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function(): void {
                 formMessages.scrollIntoView({ behavior: 'smooth' });
             } else {
                 // Show error message
-                errorText.textContent = result.error || 'Something went wrong. Please try again.';
+                errorText.textContent = form.dataset.errorGeneric ?? '';
                 errorMessage.style.display = 'block';
                 formMessages.style.display = 'block';
                 
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function(): void {
             }
         } catch (error) {
             console.error('Form submission error:', error);
-            errorText.textContent = 'Network error. Please check your connection and try again.';
+            errorText.textContent = form.dataset.errorNetwork ?? '';
             errorMessage.style.display = 'block';
             formMessages.style.display = 'block';
             

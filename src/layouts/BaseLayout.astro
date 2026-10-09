@@ -17,40 +17,40 @@ const { seo: seoProp } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 
-const shareImage = new URL("/images/meta/mintaka_share.gif", Astro.site).toString();
+const shareImage = new URL("/opengraph/share.png", Astro.site).toString();
+const canonical = new URL(pathname, Astro.site).toString();
 
-const defaultSeo: AstroSeoProps = {
-	title: "MK Dev | Performant Web Design Solutions",
-	description:
-		"Excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
-	canonical: "https://mohankumar.dev",
+const title = seoProp?.title ?? "MK Dev | Performant Web Design Solutions";
+const description =
+	seoProp?.description ??
+	"Excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence";
+
+// Pages only need to pass a title and description: the canonical URL and the
+// open graph data are derived from them, so they can't drift out of sync.
+const seo: AstroSeoProps = {
+	...seoProp,
+	title,
+	description,
+	canonical,
 	openGraph: {
-		url: "https://mohankumar.dev",
-		title: "MK Dev | Performant Web Design Solutions",
-		description:
-			"Excels in creating fast, user-friendly websites with a focus on aesthetic design and SEO optimization, ensuring a standout online presence",
+		url: canonical,
+		title,
+		description,
 		images: [
 			{
 				url: shareImage,
 				width: 1200,
 				height: 630,
-				alt: "Social open graph",
-				type: "image/gif",
-			},
-			{
-				url: shareImage,
-				width: 4096,
-				height: 4096,
-				alt: "Twitter open graph",
-				type: "image/gif",
+				alt: "MK Dev",
+				type: "image/png",
 			},
 		],
-		site_name: "MKDev",
+		site_name: "MK Dev",
+		...seoProp?.openGraph,
 	},
 	twitter: {
-		handle: "@mkdev",
-		site: "@mkdev",
 		cardType: "summary_large_image",
+		...seoProp?.twitter,
 	},
 	additionalMetaTags: [
 		{
@@ -58,11 +58,6 @@ const defaultSeo: AstroSeoProps = {
 			content: "MK",
 		},
 	],
-};
-
-const seo = {
-	...defaultSeo,
-	...seoProp,
 };
 
 function cursorFollowerActive() {
